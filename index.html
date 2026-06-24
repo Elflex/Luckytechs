@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beat Market — Fresh Naija Hits, New Stock Daily</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B1B1F;
+    --cream:#FFF8E7;
+    --sun:#FFC93C;
+    --green:#0A7B3E;
+    --red:#E63946;
+    --pink:#FF3D7F;
+    --paper-line: rgba(27,27,31,0.12);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Sora', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Anton', sans-serif;
+    font-weight:400;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    line-height:1.05;
+    margin:0;
+  }
+  .mono{ font-family:'Space Mono', monospace; }
+  a{ color:inherit; }
+  img{ max-width:100%; display:block; }
+  .wrap{
+    max-width:1080px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  :focus-visible{
+    outline:3px solid var(--ink);
+    outline-offset:3px;
+  }
+
+  /* ---------- topbar ---------- */
+  .topbar{
+    border-bottom:4px solid var(--ink);
+    background:
+      repeating-linear-gradient(90deg, var(--green) 0 14px, var(--red) 14px 28px) top/100% 6px no-repeat,
+      var(--cream);
+    padding-top:6px;
+  }
+  .topbar-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 24px;
+  }
+  .brand{
+    font-size:22px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .brand-dot{
+    width:12px;height:12px;border-radius:50%;
+    background:var(--red);
+    display:inline-block;
+  }
+  .topbar a.cta-mini{
+    font-family:'Sora',sans-serif;
+    font-weight:700;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    background:var(--ink);
+    color:var(--cream);
+    padding:10px 16px;
+    border-radius:999px;
+    text-decoration:none;
+    white-space:nowrap;
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    background:var(--sun);
+    border-bottom:4px solid var(--ink);
+    padding:56px 0 0 0;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    gap:28px;
+    padding-bottom:48px;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:1.5px;
+    background:var(--ink);
+    color:var(--sun);
+    padding:7px 12px;
+    border-radius:999px;
+    margin-bottom:18px;
+  }
+  .hero h1{
+    font-size:clamp(40px, 9vw, 78px);
+    max-width:14ch;
+  }
+  .hero h1 span{
+    -webkit-text-stroke:2px var(--ink);
+    color:var(--sun);
+  }
+  .hero p.sub{
+    font-size:18px;
+    max-width:46ch;
+    margin-top:18px;
+    font-weight:500;
+  }
+  .hero-ctas{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin-top:30px;
+    align-items:center;
+  }
+  .btn-primary{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    background:var(--red);
+    color:var(--cream);
+    font-family:'Anton', sans-serif;
+    text-transform:uppercase;
+    font-size:18px;
+    letter-spacing:0.5px;
+    padding:18px 28px;
+    border-radius:10px;
+    text-decoration:none;
+    border:3px solid var(--ink);
+    box-shadow:5px 5px 0 var(--ink);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary:hover{
+    transform:translate(2px,2px);
+    box-shadow:3px 3px 0 var(--ink);
+  }
+  .price-note{
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+  }
+
+  /* marquee */
+  .marquee-band{
+    background:var(--ink);
+    color:var(--cream);
+    overflow:hidden;
+    white-space:nowrap;
+    border-top:3px solid var(--ink);
+  }
+  .marquee-track{
+    display:inline-block;
+    padding:12px 0;
+    animation:scroll 26s linear infinite;
+  }
+  .marquee-track span{
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    letter-spacing:0.5px;
+    margin-right:48px;
+    text-transform:uppercase;
+  }
+  @keyframes scroll{
+    0%{ transform:translateX(0); }
+    100%{ transform:translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .marquee-track{ animation:none; overflow-x:auto; }
+  }
+
+  /* ---------- section heading pattern ---------- */
+  .section{ padding:64px 0; }
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin-bottom:36px;
+    flex-wrap:wrap;
+  }
+  .section-head h2{
+    font-size:clamp(28px,5vw,40px);
+  }
+  .section-head .tag{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:var(--ink);
+    opacity:0.55;
+  }
+
+  /* ---------- features (stamps) ---------- */
+  .stamp-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:20px;
+  }
+  .stamp{
+    border:3px solid var(--ink);
+    border-radius:var(--radius);
+    padding:24px;
+    background:var(--cream);
+    position:relative;
+  }
+  .stamp::before{
+    content:"";
+    position:absolute;
+    top:14px; right:14px;
+    width:34px; height:34px;
+    border-radius:50%;
+    border:2px dashed var(--ink);
+    opacity:0.35;
+  }
+  .stamp h3{
+    font-size:20px;
+    margin-bottom:8px;
+  }
+  .stamp p{
+    font-size:14.5px;
+    margin:0;
+    opacity:0.85;
+  }
+  .stamp.c1{ border-color:var(--green); }
+  .stamp.c2{ border-color:var(--red); }
+  .stamp.c3{ border-color:var(--pink); }
+  .stamp.c4{ border-color:var(--ink); }
+
+  /* ---------- how it works ---------- */
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:0;
+    border:3px solid var(--ink);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .step{
+    padding:30px 26px;
+    border-right:3px solid var(--ink);
+    background:var(--cream);
+  }
+  .step:last-child{ border-right:none; }
+  .step .num{
+    font-family:'Anton', sans-serif;
+    font-size:46px;
+    -webkit-text-stroke:1.5px var(--ink);
+    color:var(--cream);
+    display:block;
+    margin-bottom:8px;
+  }
+  .step h3{ font-size:17px; margin-bottom:6px; text-transform:none; }
+  .step p{ font-size:14px; opacity:0.85; margin:0; }
+
+  /* ---------- genres (dark) ---------- */
+  .genres-section{
+    background:var(--ink);
+    color:var(--cream);
+    border-top:4px solid var(--ink);
+    border-bottom:4px solid var(--ink);
+  }
+  .genres-section .section-head .tag{ color:var(--cream); opacity:0.6; }
+  .chip-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .chip{
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    padding:11px 18px;
+    border-radius:999px;
+    border:2px solid var(--cream);
+  }
+  .chip:nth-child(6n+1){ background:var(--red); border-color:var(--red); }
+  .chip:nth-child(6n+2){ background:var(--green); border-color:var(--green); }
+  .chip:nth-child(6n+3){ background:var(--pink); border-color:var(--pink); }
+  .chip:nth-child(6n+4){ background:var(--sun); color:var(--ink); border-color:var(--sun); }
+  .chip:nth-child(6n+5){ background:transparent; }
+  .chip:nth-child(6n+6){ background:var(--cream); color:var(--ink); border-color:var(--cream); }
+
+  /* ---------- pricing / scratch card (signature) ---------- */
+  .pricing-section{ background:var(--sun); border-bottom:4px solid var(--ink); }
+  .pricing-grid{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:28px;
+    align-items:center;
+    max-width:520px;
+    margin:0 auto;
+  }
+  .recharge-card{
+    border:3px solid var(--ink);
+    border-radius:18px;
+    background:var(--cream);
+    overflow:hidden;
+    box-shadow:8px 8px 0 var(--ink);
+  }
+  .recharge-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 22px;
+    border-bottom:2px dashed var(--ink);
+  }
+  .recharge-top .brand{
+    font-size:16px;
+  }
+  .recharge-top .mono{
+    font-size:11px;
+    opacity:0.6;
+    text-transform:uppercase;
+  }
+  .scratch-panel{
+    margin:22px;
+    border-radius:10px;
+    padding:26px 20px;
+    text-align:center;
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.18) 0 6px, transparent 6px 12px),
+      linear-gradient(135deg,#cfd4da,#9aa3ad 45%,#cfd4da 60%, #8b94a0);
+    border:2px solid var(--ink);
+    color:var(--ink);
+  }
+  .scratch-panel .label{
+    font-family:'Space Mono', monospace;
+    font-size:12px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    opacity:0.75;
+  }
+  .scratch-panel .price{
+    font-family:'Anton', sans-serif;
+    font-size:54px;
+    margin:8px 0;
+  }
+  .scratch-panel .freq{
+    font-family:'Space Mono', monospace;
+    font-size:13px;
+    text-transform:uppercase;
+  }
+  .recharge-bottom{
+    padding:18px 22px 24px;
+  }
+  .recharge-bottom ul{
+    margin:0 0 18px;
+    padding-left:18px;
+    font-size:14px;
+  }
+  .recharge-bottom li{ margin-bottom:6px; }
+  .pricing-section .btn-primary{ width:100%; justify-content:center; }
+
+  /* ---------- networks ---------- */
+  .network-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    justify-content:center;
+  }
+  .network-badge{
+    border:2.5px solid var(--ink);
+    border-radius:10px;
+    padding:14px 22px;
+    font-family:'Space Mono', monospace;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:0.5px;
+    background:var(--cream);
+  }
+
+  /* ---------- terms ---------- */
+  .terms-box{
+    border:3px solid var(--ink);
+    border-radius:var(--radius);
+    background:var(--cream);
+    padding:28px;
+  }
+  .terms-box h3{
+    font-size:18px;
+    margin-bottom:14px;
+    text-transform:none;
+  }
+  .terms-box p, .terms-box li{
+    font-size:14.5px;
+    opacity:0.9;
+  }
+  .terms-box ul{ padding-left:18px; margin:0; }
+  .terms-box li{ margin-bottom:8px; }
+
+  /* ---------- footer ---------- */
+  footer{
+    background:var(--ink);
+    color:var(--cream);
+    padding:40px 0 28px;
+  }
+  footer .foot-grid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:20px;
+    border-bottom:1px solid rgba(255,248,231,0.2);
+    padding-bottom:24px;
+    margin-bottom:18px;
+  }
+  footer .brand{ font-size:18px; }
+  footer p{ font-size:13px; opacity:0.7; margin:0; max-width:50ch; }
+  footer .fine{ font-size:12px; opacity:0.55; }
+
+  @media (max-width:640px){
+    .step{ border-right:none; border-bottom:3px solid var(--ink); }
+    .step:last-child{ border-bottom:none; }
+    .recharge-card{ box-shadow:5px 5px 0 var(--ink); }
+  }
+</style>
+</head>
+<body>
+
+  <!-- HERO: SCRATCH CARD -->
+  <header class="pricing-section" style="padding:0; border-bottom:4px solid var(--ink);">
+    <div class="marquee-band" style="border-top:none; border-bottom:3px solid var(--ink);">
+      <div class="marquee-track mono">
+        <span>★ This week's Afrobeats anthem</span>
+        <span>★ Amapiano drop of the week</span>
+        <span>★ Gospel praise mix</span>
+        <span>★ Naija hip-hop heat</span>
+        <span>★ Throwback Naija classics</span>
+        <span>★ This week's Afrobeats anthem</span>
+        <span>★ Amapiano drop of the week</span>
+        <span>★ Gospel praise mix</span>
+        <span>★ Naija hip-hop heat</span>
+        <span>★ Throwback Naija classics</span>
+      </div>
+    </div>
+    <div class="wrap" style="padding-top:40px; padding-bottom:48px;">
+      <div class="section-head" style="justify-content:center;text-align:center;flex-direction:column;align-items:center;">
+        <h2 style="font-size:clamp(32px,7vw,52px);">Today's Price</h2>
+        <span class="tag">/ scratch &amp; activate</span>
+      </div>
+      <div class="pricing-grid">
+        <div class="recharge-card">
+          <div class="recharge-top">
+            <span class="brand display"><span class="brand-dot"></span>Beat Market</span>
+            <span class="mono">Music Pass</span>
+          </div>
+          <div class="scratch-panel">
+            <div class="label">Subscription rate</div>
+            <div class="price">₦50<span style="font-size:20px;">/day</span></div>
+            <div class="freq">Billed daily · auto-renews · cancel anytime</div>
+          </div>
+          <div class="recharge-bottom">
+            <ul>
+              <li>Unlimited streaming from the full catalogue</li>
+              <li>Charged to your airtime or mobile balance</li>
+              <li>Stop anytime — see terms below</li>
+            </ul>
+            <a class="btn-primary" href="https://wwmyokgik.one/cl/bdef323e413510a5" style="width:100%;justify-content:center;">Activate My Access →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- FEATURES -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>What's on the stall</h2>
+        <span class="tag">/ what you get</span>
+      </div>
+      <div class="stamp-grid">
+        <div class="stamp c1">
+          <h3>Thousands of tracks</h3>
+          <p>A full catalogue across every Naija genre, restocked with new releases all the time.</p>
+        </div>
+        <div class="stamp c2">
+          <h3>New drops daily</h3>
+          <p>Fresh songs land every day, so there's always something new to play.</p>
+        </div>
+        <div class="stamp c3">
+          <h3>Any phone, any network</h3>
+          <p>Works on MTN, Airtel, Glo and 9mobile — no smartphone or app required.</p>
+        </div>
+        <div class="stamp c4">
+          <h3>Low data, fast load</h3>
+          <p>Built light for everyday data bundles, so streaming doesn't eat your credit.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" style="padding-top:0;">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>How to start</h2>
+        <span class="tag">/ 3 steps</span>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="num">01</span>
+          <h3>Tap "Activate My Access"</h3>
+          <p>You'll be taken to a secure page to confirm your number.</p>
+        </div>
+        <div class="step">
+          <span class="num">02</span>
+          <h3>Confirm on your phone</h3>
+          <p>Approve the prompt from your network to switch on the service.</p>
+        </div>
+        <div class="step">
+          <span class="num">03</span>
+          <h3>Start streaming</h3>
+          <p>Browse the catalogue and play your first track in seconds.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GENRES -->
+  <section class="section genres-section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Every corner of the market</h2>
+        <span class="tag">/ genres</span>
+      </div>
+      <div class="chip-row">
+        <span class="chip">Afrobeats</span>
+        <span class="chip">Amapiano</span>
+        <span class="chip">Naija Pop</span>
+        <span class="chip">Gospel</span>
+        <span class="chip">Hip-Hop</span>
+        <span class="chip">Throwbacks</span>
+        <span class="chip">Highlife</span>
+        <span class="chip">Afro-fusion</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- NETWORKS -->
+  <section class="section" style="padding-bottom:32px;">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Available on</h2>
+        <span class="tag">/ networks</span>
+      </div>
+      <div class="network-row">
+        <span class="network-badge">MTN</span>
+        <span class="network-badge">Airtel</span>
+        <span class="network-badge">Glo</span>
+        <span class="network-badge">9mobile</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TERMS -->
+  <section class="section" style="padding-top:0;">
+    <div class="wrap">
+      <div class="terms-box">
+        <h3>Subscription terms — please read before activating</h3>
+        <ul>
+          <li><strong>Price:</strong> ₦50 per day, charged to your mobile airtime or carrier balance.</li>
+          <li><strong>Billing:</strong> Subscription auto-renews daily until you cancel. You will be billed again each day you remain subscribed.</li>
+          <li><strong>How to cancel:</strong> Text STOP to 32665, or dial *xxx# at any time, free of charge. [Replace with your real shortcode/USSD]</li>
+          <li><strong>Support:</strong> Email support@beatmarket.example or call [insert customer care number] for help.</li>
+          <li><strong>Eligibility:</strong> Available to MTN, Airtel, Glo and 9mobile subscribers in Nigeria, 18 years and older.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-grid">
+        <div>
+          <div class="brand display">Beat Market</div>
+        </div>
+        <p>Beat Market is a mobile music subscription service. By subscribing you agree to recurring daily billing until cancelled. See terms above for full pricing and cancellation details.</p>
+      </div>
+      <div class="fine">©️ 2026 Beat Market. All rights reserved. [Insert company registration / address here]</div>
+    </div>
+  </footer>
+
+</body>
+</html>
